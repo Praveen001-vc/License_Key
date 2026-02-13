@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MahilMart License Manager</title>
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --accent: #1d4ed8;
+      --accent-2: #0ea5e9;
+      --ok: #15803d;
+      --warn: #b45309;
+      --err: #b91c1c;
+      --line: #dbe3f0;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background: radial-gradient(circle at 10% 10%, #e0ebff 0, #eef2ff 45%, #f8faff 100%);
+    }
+    .container { width: min(1400px, 96vw); margin: 20px auto; }
+    .hero {
+      background: linear-gradient(120deg, #0f172a, #102a5e 60%, #0d4a76);
+      border-radius: 16px;
+      color: #fff;
+      padding: 18px 22px;
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.25);
+    }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .hero h1 { margin: 0; font-size: 32px; }
+    .hero p { margin: 8px 0 0; color: #cbd5e1; }
+    .hero-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .user-chip {
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-nav {
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+    }
+    .btn-nav:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .stats {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .stat .label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .stat .value { margin-top: 4px; font-size: 28px; font-weight: 800; }
+    .split {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1.1fr 1.2fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+    .panel h2 { margin: 0 0 12px; font-size: 20px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .field input, .field textarea {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 11px;
+      font-size: 14px;
+      outline: none;
+      background: #fbfdff;
+    }
+    .field textarea { min-height: 78px; resize: vertical; }
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-main { background: linear-gradient(120deg, var(--accent), var(--accent-2)); color: #fff; }
+    .btn-lite { background: #e7eefb; color: #0f172a; }
+    .output {
+      margin-top: 12px;
+      border: 1px dashed #9eb5df;
+      border-radius: 12px;
+      padding: 12px;
+      background: #f7faff;
+    }
+    .machine { color: var(--muted); font-size: 13px; }
+    .license {
+      margin-top: 6px;
+      font-family: Consolas, monospace;
+      font-size: 34px;
+      font-weight: 700;
+      color: #0b3b6f;
+      word-break: break-all;
+    }
+
+    .messages { margin: 12px 0; display: grid; gap: 8px; }
+    .msg {
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .success { background: #e9f8ef; color: var(--ok); border: 1px solid #b8e7c8; }
+    .warning { background: #fff7e9; color: var(--warn); border: 1px solid #f2dfb8; }
+    .error { background: #fdeeee; color: var(--err); border: 1px solid #f4c9c9; }
+    .info { background: #eaf4ff; color: #1e40af; border: 1px solid #c2ddff; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #edf1f7; text-align: left; font-size: 13px; }
+    th { font-size: 12px; text-transform: uppercase; color: var(--muted); background: #f8fbff; }
+    tbody tr:hover { background: #f8fbff; }
+
+    @media (max-width: 1080px) {
+      .stats { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+      .split { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>MahilMart License Key Generator</h1>
+          <p>Fully separate project with dedicated settings, model, view, and urls.</p>
+        </div>
+        <div class="hero-actions">
+          <span class="user-chip">User: {{ request.user.username }}</span>
+          {% if request.user.is_superuser %}
+          <a href="{% url 'licenses:user_list' %}" class="btn-nav">Users</a>
+          {% endif %}
+          <form method="post" action="{% url 'licenses:logout' %}" style="margin:0;">
+            {% csrf_token %}
+            <button type="submit" class="btn-nav">Logout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="label">Total Keys</div><div class="value">{{ total_keys }}</div></div>
+      <div class="stat"><div class="label">Today Keys</div><div class="value">{{ today_keys }}</div></div>
+      <div class="stat"><div class="label">Unique Machines</div><div class="value">{{ unique_machines }}</div></div>
+      <div class="stat"><div class="label">Last Generated</div><div class="value" style="font-size:18px;">{% if last_generated %}{{ last_generated|date:"Y-m-d H:i:s" }}{% else %}-{% endif %}</div></div>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="msg {% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="split">
+      <div class="panel">
+        <h2>Generate License</h2>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="form_action" value="generate_license">
+          <div class="grid">
+            <div class="field">
+              <label>Machine ID</label>
+              <input type="text" name="machine_id" value="{{ form_values.machine_id }}" placeholder="DESKTOP-XXXXXXX" required>
+            </div>
+            <div class="field">
+              <label>Contact Email</label>
+              <input type="email" name="contact_email" value="{{ form_values.contact_email }}" placeholder="customer@email.com">
+            </div>
+            <div class="field">
+              <label>Customer Name</label>
+              <input type="text" name="customer_name" value="{{ form_values.customer_name }}" placeholder="Customer name">
+            </div>
+            <div class="field">
+              <label>License Email (Fixed)</label>
+              <input type="text" value="{{ license_email|default:'mahiltechlab.ops@gmail.com' }}" readonly>
+            </div>
+            <div class="field full">
+              <label>Note</label>
+              <textarea name="note" placeholder="Optional notes">{{ form_values.note }}</textarea>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn btn-main" type="submit">Generate Key</button>
+            <button class="btn btn-lite" type="button" id="copyBtn" {% if not generated_key %}disabled{% endif %}>Copy Key</button>
+          </div>
+        </form>
+
+        <div class="output">
+          <div class="machine">Generated for: <strong>{{ generated_machine|default:"-" }}</strong></div>
+          <div class="license" id="generatedKeyText">{% if generated_key %}{{ generated_key }}{% else %}No key generated yet{% endif %}</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Recent Generated Keys</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>License Key</th>
+              <th>Machine</th>
+              <th>Customer</th>
+              <th>Contact Email</th>
+              <th>Note</th>
+              <th>Valid Until</th>
+              <th>Status</th>
+              <th>Source</th>
+              <th>At</th>
+              <th>By</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in recent_licenses %}
+            <tr>
+              <td>{{ item.license_key }}</td>
+              <td>{{ item.machine_id }}</td>
+              <td>{{ item.customer_name|default:"-" }}</td>
+              <td>{{ item.contact_email|default:"-" }}</td>
+              <td>{{ item.note|default:"-" }}</td>
+              <td>{% if item.valid_until %}{{ item.valid_until|date:"Y-m-d H:i:s" }}{% else %}-{% endif %}</td>
+              <td>{{ item.status|default:"-" }}</td>
+              <td>{{ item.source|default:"-" }}</td>
+              <td>{{ item.generated_at|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ item.generated_by|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="10">No generated keys yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {% if request.user.is_superuser %}
+    <div class="panel" style="margin-top:12px;">
+      <h2>MongoDB Settings</h2>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="form_action" value="save_mongo_settings">
+        <div class="grid">
+          <div class="field full">
+            <label>Mongo URI</label>
+            <input type="text" name="mongo_uri" value="{{ mongo_form_values.mongo_uri }}" placeholder="mongodb+srv://...">
+          </div>
+          <div class="field">
+            <label>Mongo DB</label>
+            <input type="text" name="mongo_db" value="{{ mongo_form_values.mongo_db }}" required>
+          </div>
+          <div class="field">
+            <label>Mongo Collection</label>
+            <input type="text" name="mongo_collection" value="{{ mongo_form_values.mongo_collection }}" required>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn btn-main" type="submit">Save Mongo Settings</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    (function () {
+      const copyButton = document.getElementById("copyBtn");
+      const keyTextNode = document.getElementById("generatedKeyText");
+      if (!copyButton || !keyTextNode) return;
+      const defaultLabel = copyButton.textContent;
+
+      function legacyCopy(text) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "readonly");
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try {
+          ok = !!document.execCommand("copy");
+        } catch (e) {
+          ok = false;
+        }
+        document.body.removeChild(ta);
+        return ok;
+      }
+
+      copyButton.addEventListener("click", async function () {
+        const text = (keyTextNode.textContent || "").trim();
+        if (!text || text === "No key generated yet") return;
+        let copied = legacyCopy(text);
+        if (!copied && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          try {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          } catch (e) {
+            copied = false;
+          }
+        }
+        copyButton.textContent = copied ? "Copied" : "Copy Manually";
+        if (!copied && window.prompt) {
+          window.prompt("Copy manually (Ctrl+C then Enter):", text);
+        }
+        setTimeout(function () {
+          copyButton.textContent = defaultLabel;
+        }, 1400);
+      });
+    })();
+  </script>
+</body>
+</html>

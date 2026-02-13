@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | {{ app_name }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #12355b;
+      --primary-dark: #0a2540;
+      --secondary: #1f7a8c;
+      --accent: #ff7a18;
+      --accent-soft: #ffa94d;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --text-strong: #0f172a;
+      --text-soft: #4b5563;
+      --line: #dbe5f0;
+      --ok: #16a34a;
+      --danger: #dc2626;
+      --shadow-soft: 0 14px 36px rgba(15, 23, 42, 0.16);
+      --shadow-strong: 0 24px 52px rgba(15, 23, 42, 0.24);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --anim: 0.26s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      color: var(--text-strong);
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255, 122, 24, 0.2), transparent 32%),
+        radial-gradient(circle at 82% 22%, rgba(31, 122, 140, 0.2), transparent 36%),
+        linear-gradient(140deg, #edf2f7 0%, #e2e8f0 42%, #dbe5f0 100%);
+      overflow-x: hidden;
+    }
+
+    .orb-layer {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.38;
+      animation: drift 16s infinite ease-in-out alternate;
+    }
+
+    .orb.one {
+      width: 350px;
+      height: 350px;
+      left: -80px;
+      top: -120px;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 122, 24, 0.35), rgba(255, 122, 24, 0));
+    }
+
+    .orb.two {
+      width: 420px;
+      height: 420px;
+      right: -120px;
+      top: 18%;
+      background: radial-gradient(circle at 40% 40%, rgba(18, 53, 91, 0.35), rgba(18, 53, 91, 0));
+      animation-delay: 2s;
+    }
+
+    .orb.three {
+      width: 300px;
+      height: 300px;
+      left: 26%;
+      bottom: -140px;
+      background: radial-gradient(circle at 50% 40%, rgba(31, 122, 140, 0.35), rgba(31, 122, 140, 0));
+      animation-delay: 4s;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .top-bar {
+      padding: 14px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+      background: linear-gradient(120deg, rgba(18, 53, 91, 0.95), rgba(10, 37, 64, 0.92));
+      color: #fff;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.22);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "Outfit", sans-serif;
+      font-size: 1.34rem;
+      font-weight: 700;
+    }
+
+    .brand-title i {
+      color: var(--accent-soft);
+    }
+
+    .time-date-container {
+      text-align: right;
+      min-width: 210px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      padding: 8px 14px;
+    }
+
+    .time-display {
+      font-family: "Outfit", sans-serif;
+      font-size: 1.52rem;
+      line-height: 1;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .date-display {
+      margin-top: 2px;
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .content-area {
+      display: grid;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .login-layout {
+      width: min(1220px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .hero-panel {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: linear-gradient(125deg, #0f2f50 0%, #12355b 42%, #1f7a8c 100%);
+      box-shadow: var(--shadow-strong);
+      color: #fff;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 560px;
+      position: relative;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      right: -100px;
+      top: -130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      margin-top: 14px;
+      font-family: "Outfit", sans-serif;
+      font-size: 2.2rem;
+      line-height: 1.14;
+      font-weight: 800;
+      max-width: 560px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-subtitle {
+      margin-top: 10px;
+      max-width: 520px;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 0.98rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-feature-list {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.88);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-feature-list span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-feature-list i {
+      color: #86efac;
+      font-size: 0.85rem;
+    }
+
+    .login-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .messages-wrap {
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .messages-wrap .alert {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+    }
+
+    .login-card {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .card-header {
+      position: relative;
+      background: linear-gradient(125deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 30px 28px 26px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .card-header::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .logo-circle {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.5rem;
+      background: linear-gradient(140deg, var(--accent), var(--accent-soft));
+      box-shadow: 0 8px 20px rgba(255, 122, 24, 0.34);
+    }
+
+    .logo-text h1 {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      font-size: 1.62rem;
+      font-weight: 700;
+    }
+
+    .logo-text span {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .welcome-text h2 {
+      margin: 0;
+      font-family: "Outfit", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .welcome-text p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 0.9rem;
+    }
+
+    .card-body {
+      padding: 28px;
+    }
+
+    .login-form h3 {
+      text-align: center;
+      font-family: "Outfit", sans-serif;
+      font-size: 1.34rem;
+      margin-bottom: 22px;
+      color: var(--primary-dark);
+    }
+
+    .error-message {
+      margin-bottom: 16px;
+      border-radius: 10px;
+      background: rgba(220, 38, 38, 0.1);
+      border-left: 4px solid var(--danger);
+      padding: 11px 13px;
+      color: var(--danger);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #243447;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7b8794;
+    }
+
+    .login-form input {
+      width: 100%;
+      padding: 13px 14px 13px 46px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      font-size: 0.95rem;
+      color: var(--text-strong);
+      background: var(--surface-strong);
+      transition: border-color var(--anim), box-shadow var(--anim);
+    }
+
+    .login-form input:focus {
+      border-color: #7aa2d4;
+      box-shadow: 0 0 0 4px rgba(18, 53, 91, 0.12);
+      outline: none;
+    }
+
+    .toggle-password {
+      left: auto;
+      right: 14px;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      width: 100%;
+      border: none;
+      border-radius: 11px;
+      padding: 14px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(125deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 11px 24px rgba(18, 53, 91, 0.27);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform var(--anim), box-shadow var(--anim);
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(18, 53, 91, 0.32);
+    }
+
+    .app-footer {
+      margin: 0 24px 18px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      color: rgba(255, 255, 255, 0.94);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.84rem;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.26);
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0px) translateX(0px); }
+      to { transform: translateY(-10px) translateX(12px); }
+    }
+
+    @media (max-width: 1080px) {
+      .login-layout { grid-template-columns: 1fr; }
+      .hero-panel { min-height: 320px; }
+    }
+
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 12px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .time-date-container {
+        width: 100%;
+        text-align: left;
+      }
+
+      .content-area { padding: 14px; }
+      .hero-panel, .card-header, .card-body { padding: 20px; }
+      .hero-feature-list { grid-template-columns: 1fr; }
+      .app-footer { margin: 0 14px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb-layer" aria-hidden="true">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+  </div>
+
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand-title">
+        <i class="fas fa-key"></i>
+        <span>{{ app_name }}</span>
+      </div>
+      <div class="time-date-container">
+        <div class="time-display" id="liveClock">00:00:00</div>
+        <div class="date-display">
+          <i class="fas fa-calendar-alt"></i>
+          <span id="liveDate">Loading...</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <div class="login-layout">
+        <section class="hero-panel">
+          <div>
+            <span class="hero-badge"><i class="fas fa-shield-halved"></i> Secure License Platform</span>
+            <h1 class="hero-title">Manage machine licenses, operators, and audit-ready key generation</h1>
+            <p class="hero-subtitle">Centralized license workflow with secure sign-in and role-based access for your operations team.</p>
+            <div class="hero-feature-list">
+              <span><i class="fas fa-check-circle"></i> Machine-based key generation</span>
+              <span><i class="fas fa-check-circle"></i> Mongo + local persistence</span>
+              <span><i class="fas fa-check-circle"></i> User access control</span>
+              <span><i class="fas fa-check-circle"></i> Live dashboard analytics</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="login-column">
+          {% if messages %}
+            <div class="messages-wrap">
+              {% for msg in messages %}
+                <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+                  {{ msg }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="login-card">
+            <div class="card-header">
+              <div class="logo-container">
+                <div class="logo-circle">
+                  <i class="fas fa-user-lock"></i>
+                </div>
+                <div class="logo-text">
+                  <h1>{{ app_name }}</h1>
+                  <span>{{ app_tagline }}</span>
+                </div>
+              </div>
+              <div class="welcome-text">
+                <h2>Secure Authentication</h2>
+                <p>Sign in to continue</p>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="login-form">
+                <h3>Login</h3>
+
+                <form method="post">
+                  {% csrf_token %}
+
+                  {% if error %}
+                    <div class="error-message">
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <span>{{ error }}</span>
+                    </div>
+                  {% endif %}
+
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-with-icon">
+                      <i class="fas fa-user"></i>
+                      <input type="text" id="username" name="username" required value="{{ username|default:'' }}" placeholder="Enter your username">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                      <i class="fas fa-lock"></i>
+                      <input type="password" id="password" name="password" required placeholder="Enter your password">
+                      <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login to Dashboard</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <span><i class="fas fa-cube"></i> {{ app_name }} {{ app_version }}</span>
+      <span><i class="far fa-copyright"></i> 2026 MahilTechLab</span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function togglePassword() {
+      const pwd = document.getElementById("password");
+      const eye = document.querySelector(".toggle-password");
+      if (!pwd || !eye) return;
+      if (pwd.type === "password") {
+        pwd.type = "text";
+        eye.classList.remove("fa-eye");
+        eye.classList.add("fa-eye-slash");
+      } else {
+        pwd.type = "password";
+        eye.classList.remove("fa-eye-slash");
+        eye.classList.add("fa-eye");
+      }
+    }
+
+    function fmt(value) {
+      return value < 10 ? "0" + value : value;
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const liveClock = document.getElementById("liveClock");
+      const liveDate = document.getElementById("liveDate");
+      if (liveClock) {
+        liveClock.textContent = fmt(now.getHours()) + ":" + fmt(now.getMinutes()) + ":" + fmt(now.getSeconds());
+      }
+      if (liveDate) {
+        liveDate.textContent = days[now.getDay()] + ", " + months[now.getMonth()] + " " + now.getDate() + ", " + now.getFullYear();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      setTimeout(function() {
+        document.querySelectorAll(".alert").forEach(function(alert) {
+          alert.classList.remove("show");
+          setTimeout(function() { alert.remove(); }, 300);
+        });
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
