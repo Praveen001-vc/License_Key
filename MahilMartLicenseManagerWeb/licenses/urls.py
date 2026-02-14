@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     dashboard_view,
+    healthz_view,
     initial_admin_setup,
     login_view,
     logout_view,
@@ -14,6 +15,7 @@ from .views import (
 app_name = "licenses"
 
 urlpatterns = [
+    path("healthz/", healthz_view, name="healthz"),
     path("", login_view, name="login"),
     path("setup-admin/", initial_admin_setup, name="initial_admin_setup"),
     path("logout/", logout_view, name="logout"),

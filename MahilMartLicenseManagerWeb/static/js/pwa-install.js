@@ -8,6 +8,7 @@
   var isIOS = /iphone|ipad|ipod/.test(ua);
   var isIOSChromeFamily = /crios|fxios|edgios|opios/.test(ua);
   var isIOSSafari = isIOS && /safari/.test(ua) && !isIOSChromeFamily;
+  var isAndroidChrome = /android/.test(ua) && /chrome/.test(ua) && !/edg|opr/.test(ua);
   var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   var isLocalhost = location.hostname === "127.0.0.1" || location.hostname === "localhost";
   var hasSecureContext = location.protocol === "https:" || isLocalhost;
@@ -41,7 +42,11 @@
     deferredPrompt = event;
     showInstallButton("Install App");
     if (!hasSecureContext) {
-      showHint("Use HTTPS for reliable install support.");
+      if (isAndroidChrome) {
+        showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
+      } else {
+        showHint("Use HTTPS for reliable install support.");
+      }
     }
   });
 
@@ -65,7 +70,11 @@
     }
 
     if (!hasSecureContext) {
-      showHint("Install prompt may be blocked on non-HTTPS pages.");
+      if (isAndroidChrome) {
+        showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
+      } else {
+        showHint("Install prompt may be blocked on non-HTTPS pages.");
+      }
       return;
     }
 
@@ -80,6 +89,10 @@
 
   if (!hasSecureContext) {
     showInstallButton("Install App");
-    showHint("Switch to HTTPS for best install support.");
+    if (isAndroidChrome) {
+      showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
+    } else {
+      showHint("Switch to HTTPS for best install support.");
+    }
   }
 })();

@@ -6,6 +6,7 @@
   "scripts": {
     "cap:doctor": "npx cap doctor",
     "mobile:set-url": "node scripts/set-mobile-url.mjs",
+    "mobile:set-auto": "node scripts/set-mobile-url.mjs --auto",
     "cap:sync": "npx cap sync",
     "mobile:add:android": "npx cap add android",
     "mobile:add:ios": "npx cap add ios",

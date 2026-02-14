@@ -1,8 +1,7 @@
 param(
     [ValidateSet("android", "ios")]
     [string]$Platform = "android",
-    [Parameter(Mandatory = $true)]
-    [string]$AppUrl
+    [string]$AppUrl = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,7 +17,12 @@ if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
 Push-Location "$PSScriptRoot\\mobile"
 try {
     npm install
-    npm run mobile:set-url -- --url $AppUrl
+    if ([string]::IsNullOrWhiteSpace($AppUrl)) {
+        npm run mobile:set-auto
+    }
+    else {
+        npm run mobile:set-url -- --url $AppUrl
+    }
 
     if ($Platform -eq "android") {
         if (-not (Test-Path ".\\android")) {

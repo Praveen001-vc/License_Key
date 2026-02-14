@@ -1,0 +1,5 @@
+{
+  "fixedUrl": "",
+  "port": 8001,
+  "healthPath": "/healthz/"
+}

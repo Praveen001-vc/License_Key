@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
       min-height: 100vh;
       display: grid;
       place-items: center;
@@ -24,22 +24,96 @@
     }
     h1 {
       margin: 0 0 10px;
-      font-size: 24px;
+      font-size: 22px;
     }
     p {
-      margin: 0;
+      margin: 6px 0 0;
       line-height: 1.4;
       color: #334155;
+    }
+    .status {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #dbe5f0;
+      background: #f8fbff;
+      color: #1e293b;
+      font-size: 14px;
+    }
+    .controls {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
+    .field input {
+      min-height: 42px;
+      border: 1px solid #dbe5f0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+    .btn-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(120deg, #1d4ed8, #0ea5e9);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary {
+      border: 1px solid #dbe5f0;
+      background: #fff;
+      color: #0f172a;
+    }
+    .small {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #64748b;
+    }
+    @media (max-width: 560px) {
+      .btn-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <section class="card">
     <h1>MahilMart License Manager</h1>
-    <p>
-      Mobile wrapper is configured. Set your server URL in
-      <code>mobile/capacitor.config.json</code> before building native apps.
-    </p>
+    <p>Detecting server IP automatically...</p>
+
+    <div id="status" class="status">Starting auto detection.</div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="manualUrl">Manual server URL (if auto detect fails)</label>
+        <input id="manualUrl" type="text" placeholder="http://192.168.1.20:8001">
+      </div>
+      <div class="btn-row">
+        <button id="connectBtn" type="button">Connect</button>
+        <button id="rescanBtn" class="secondary" type="button">Rescan</button>
+      </div>
+    </div>
+
+    <div class="small">
+      Keep PC and mobile on same Wi-Fi. PC app must be running.
+    </div>
   </section>
+  <script src="./app.js"></script>
 </body>
 </html>

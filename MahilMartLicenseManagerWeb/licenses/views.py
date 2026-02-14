@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -179,6 +180,18 @@ def login_view(request):
         return redirect("licenses:dashboard")
 
     return render(request, "licenses/home.html", context)
+
+
+def healthz_view(request):
+    response = JsonResponse(
+        {
+            "status": "ok",
+            "app": "MahilMartLicenseManagerWeb",
+        }
+    )
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Cache-Control"] = "no-store"
+    return response
 
 
 def initial_admin_setup(request):

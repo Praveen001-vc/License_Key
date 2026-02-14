@@ -93,11 +93,12 @@ Native Mobile App Build (APK / iOS app):
 
 Quick build command (Windows):
   1) Android:
-     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform android -AppUrl "https://your-domain.example.com"
+     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform android
   2) iOS (macOS required for final iOS build):
-     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform ios -AppUrl "https://your-domain.example.com"
+     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform ios
 
 Notes for native wrapper:
-  - AppUrl must be reachable from the mobile device.
-  - For release builds, use HTTPS URL.
-  - For local testing, LAN HTTP URL is allowed (example: http://192.168.1.10:8001).
+  - Default mode auto-detects server IP on local Wi-Fi (port 8001) using /healthz/.
+  - If needed, set fixed URL:
+      npm run mobile:set-url -- --url http://192.168.1.10:8001
+  - For release/internet builds, use HTTPS fixed URL.
