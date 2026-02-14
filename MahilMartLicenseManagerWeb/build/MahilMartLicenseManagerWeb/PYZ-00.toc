@@ -1,5 +1,5 @@
 ('C:\\Users\\Billing System '
- '2\\Documents\\MahilMartLicenseManagerWeb\\build\\MahilMartLicenseManagerWeb\\PYZ-00.pyz',
+ '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\build\\MahilMartLicenseManagerWeb\\PYZ-00.pyz',
  [('PIL',
    'C:\\Users\\Billing System '
    '2\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python313\\site-packages\\PIL\\__init__.py',
@@ -5326,79 +5326,83 @@
    'PYMODULE'),
   ('license_manager_web',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\license_manager_web\\__init__.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\license_manager_web\\__init__.py',
+   'PYMODULE'),
+  ('license_manager_web.pwa_views',
+   'C:\\Users\\Billing System '
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\license_manager_web\\pwa_views.py',
    'PYMODULE'),
   ('license_manager_web.settings',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\license_manager_web\\settings.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\license_manager_web\\settings.py',
    'PYMODULE'),
   ('license_manager_web.urls',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\license_manager_web\\urls.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\license_manager_web\\urls.py',
    'PYMODULE'),
   ('license_manager_web.wsgi',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\license_manager_web\\wsgi.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\license_manager_web\\wsgi.py',
    'PYMODULE'),
   ('licenses',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\__init__.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\__init__.py',
    'PYMODULE'),
   ('licenses.admin',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\admin.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\admin.py',
    'PYMODULE'),
   ('licenses.apps',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\apps.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\apps.py',
    'PYMODULE'),
   ('licenses.management',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\management\\__init__.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\management\\__init__.py',
    'PYMODULE'),
   ('licenses.management.commands',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\management\\commands\\__init__.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\management\\commands\\__init__.py',
    'PYMODULE'),
   ('licenses.management.commands.runserver',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\management\\commands\\runserver.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\management\\commands\\runserver.py',
    'PYMODULE'),
   ('licenses.migrations',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\migrations\\__init__.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\migrations\\__init__.py',
    'PYMODULE'),
   ('licenses.migrations.0001_initial',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0001_initial.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0001_initial.py',
    'PYMODULE'),
   ('licenses.migrations.0002_generatedlicense_valid_until',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0002_generatedlicense_valid_until.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0002_generatedlicense_valid_until.py',
    'PYMODULE'),
   ('licenses.migrations.0003_licenseruntimeconfig',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0003_licenseruntimeconfig.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\migrations\\0003_licenseruntimeconfig.py',
    'PYMODULE'),
   ('licenses.models',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\models.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\models.py',
    'PYMODULE'),
   ('licenses.services',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\services.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\services.py',
    'PYMODULE'),
   ('licenses.tests',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\tests.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\tests.py',
    'PYMODULE'),
   ('licenses.urls',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\urls.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\urls.py',
    'PYMODULE'),
   ('licenses.views',
    'C:\\Users\\Billing System '
-   '2\\Documents\\MahilMartLicenseManagerWeb\\licenses\\views.py',
+   '2\\Documents\\GitHub\\License_Key\\MahilMartLicenseManagerWeb\\licenses\\views.py',
    'PYMODULE'),
   ('logging',
    'C:\\Program '

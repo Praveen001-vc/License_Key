@@ -15,7 +15,7 @@
 
 <div class="node">
   <a name="app_launcher.py"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/app_launcher.py" type="text/plain"><tt>app_launcher.py</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/app_launcher.py" type="text/plain"><tt>app_launcher.py</tt></a>
 <span class="moduletype">Script</span>  <div class="import">
 imports:
     <a href="#_collections_abc">_collections_abc</a>
@@ -11298,6 +11298,8 @@ imported by:
  &#8226;   <a href="#django.views.debug">django.views.debug</a>
  &#8226;   <a href="#django.views.generic.dates">django.views.generic.dates</a>
  &#8226;   <a href="#django.views.i18n">django.views.i18n</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
+ &#8226;   <a href="#license_manager_web.urls">license_manager_web.urls</a>
  &#8226;   <a href="#licenses.services">licenses.services</a>
  &#8226;   <a href="#licenses.views">licenses.views</a>
 
@@ -14432,6 +14434,7 @@ imported by:
     <a href="#app_launcher.py">app_launcher.py</a>
  &#8226;   <a href="#django">django</a>
  &#8226;   <a href="#django.contrib.staticfiles.urls">django.contrib.staticfiles.urls</a>
+ &#8226;   <a href="#license_manager_web.urls">license_manager_web.urls</a>
 
   </div>
 
@@ -22390,6 +22393,7 @@ imports:
 imported by:
     <a href="#app_launcher.py">app_launcher.py</a>
  &#8226;   <a href="#django">django</a>
+ &#8226;   <a href="#licenses.management.commands.runserver">licenses.management.commands.runserver</a>
 
   </div>
 
@@ -24981,7 +24985,6 @@ imported by:
  &#8226;   <a href="#django">django</a>
  &#8226;   <a href="#django.contrib.staticfiles.management.commands.runserver">django.contrib.staticfiles.management.commands.runserver</a>
  &#8226;   <a href="#django.core.management">django.core.management</a>
- &#8226;   <a href="#licenses.management.commands.runserver">licenses.management.commands.runserver</a>
 
   </div>
 
@@ -30368,6 +30371,7 @@ imported by:
  &#8226;   <a href="#django.views.generic.list">django.views.generic.list</a>
  &#8226;   <a href="#django.views.i18n">django.views.i18n</a>
  &#8226;   <a href="#django.views.static">django.views.static</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
 
   </div>
 
@@ -44436,10 +44440,18 @@ imported by:
 
 <div class="node">
   <a name="license_manager_web"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/license_manager_web/__init__.py" type="text/plain"><tt>license_manager_web</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/license_manager_web/__init__.py" type="text/plain"><tt>license_manager_web</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#license_manager_web">license_manager_web</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
+
+  </div>
+  <div class="import">
 imported by:
-    <a href="#license_manager_web.settings">license_manager_web.settings</a>
+    <a href="#license_manager_web">license_manager_web</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
+ &#8226;   <a href="#license_manager_web.settings">license_manager_web.settings</a>
  &#8226;   <a href="#license_manager_web.urls">license_manager_web.urls</a>
  &#8226;   <a href="#license_manager_web.wsgi">license_manager_web.wsgi</a>
 
@@ -44448,8 +44460,28 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="license_manager_web.pwa_views"></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/license_manager_web/pwa_views.py" type="text/plain"><tt>license_manager_web.pwa_views</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#django.conf">django.conf</a>
+ &#8226;   <a href="#django.http">django.http</a>
+ &#8226;   <a href="#license_manager_web">license_manager_web</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#license_manager_web">license_manager_web</a>
+ &#8226;   <a href="#license_manager_web.urls">license_manager_web.urls</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="license_manager_web.settings"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/license_manager_web/settings.py" type="text/plain"><tt>license_manager_web.settings</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/license_manager_web/settings.py" type="text/plain"><tt>license_manager_web.settings</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#license_manager_web">license_manager_web</a>
@@ -44467,13 +44499,16 @@ imported by:
 
 <div class="node">
   <a name="license_manager_web.urls"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/license_manager_web/urls.py" type="text/plain"><tt>license_manager_web.urls</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/license_manager_web/urls.py" type="text/plain"><tt>license_manager_web.urls</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#django.contrib">django.contrib</a>
+    <a href="#django.conf">django.conf</a>
+ &#8226;   <a href="#django.conf.urls.static">django.conf.urls.static</a>
+ &#8226;   <a href="#django.contrib">django.contrib</a>
  &#8226;   <a href="#django.contrib.admin">django.contrib.admin</a>
  &#8226;   <a href="#django.urls">django.urls</a>
  &#8226;   <a href="#license_manager_web">license_manager_web</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
 
   </div>
   <div class="import">
@@ -44486,7 +44521,7 @@ imported by:
 
 <div class="node">
   <a name="license_manager_web.wsgi"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/license_manager_web/wsgi.py" type="text/plain"><tt>license_manager_web.wsgi</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/license_manager_web/wsgi.py" type="text/plain"><tt>license_manager_web.wsgi</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.core.wsgi">django.core.wsgi</a>
@@ -44504,7 +44539,7 @@ imported by:
 
 <div class="node">
   <a name="licenses"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/__init__.py" type="text/plain"><tt>licenses</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/__init__.py" type="text/plain"><tt>licenses</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imported by:
     <a href="#django">django</a>
@@ -44524,7 +44559,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.admin"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/admin.py" type="text/plain"><tt>licenses.admin</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/admin.py" type="text/plain"><tt>licenses.admin</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.contrib">django.contrib</a>
@@ -44543,7 +44578,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.apps"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/apps.py" type="text/plain"><tt>licenses.apps</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/apps.py" type="text/plain"><tt>licenses.apps</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.apps">django.apps</a>
@@ -44560,7 +44595,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.management"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/management/__init__.py" type="text/plain"><tt>licenses.management</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/management/__init__.py" type="text/plain"><tt>licenses.management</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
     <a href="#licenses">licenses</a>
@@ -44577,7 +44612,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.management.commands"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/management/commands/__init__.py" type="text/plain"><tt>licenses.management.commands</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/management/commands/__init__.py" type="text/plain"><tt>licenses.management.commands</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
     <a href="#licenses.management">licenses.management</a>
@@ -44594,11 +44629,11 @@ imported by:
 
 <div class="node">
   <a name="licenses.management.commands.runserver"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/management/commands/runserver.py" type="text/plain"><tt>licenses.management.commands.runserver</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/management/commands/runserver.py" type="text/plain"><tt>licenses.management.commands.runserver</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#django.core.management.base">django.core.management.base</a>
- &#8226;   <a href="#django.core.management.commands.runserver">django.core.management.commands.runserver</a>
+    <a href="#django.contrib.staticfiles.management.commands.runserver">django.contrib.staticfiles.management.commands.runserver</a>
+ &#8226;   <a href="#django.core.management.base">django.core.management.base</a>
  &#8226;   <a href="#licenses.management.commands">licenses.management.commands</a>
  &#8226;   <a href="#os">os</a>
 
@@ -44613,7 +44648,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.migrations"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/migrations/__init__.py" type="text/plain"><tt>licenses.migrations</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/migrations/__init__.py" type="text/plain"><tt>licenses.migrations</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imports:
     <a href="#licenses">licenses</a>
@@ -44632,7 +44667,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.migrations.0001_initial"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/migrations/0001_initial.py" type="text/plain"><tt>licenses.migrations.0001_initial</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/migrations/0001_initial.py" type="text/plain"><tt>licenses.migrations.0001_initial</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.db">django.db</a>
@@ -44651,7 +44686,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.migrations.0002_generatedlicense_valid_until"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/migrations/0002_generatedlicense_valid_until.py" type="text/plain"><tt>licenses.migrations.0002_generatedlicense_valid_until</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/migrations/0002_generatedlicense_valid_until.py" type="text/plain"><tt>licenses.migrations.0002_generatedlicense_valid_until</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.db">django.db</a>
@@ -44670,7 +44705,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.migrations.0003_licenseruntimeconfig"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/migrations/0003_licenseruntimeconfig.py" type="text/plain"><tt>licenses.migrations.0003_licenseruntimeconfig</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/migrations/0003_licenseruntimeconfig.py" type="text/plain"><tt>licenses.migrations.0003_licenseruntimeconfig</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.db">django.db</a>
@@ -44689,7 +44724,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.models"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/models.py" type="text/plain"><tt>licenses.models</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/models.py" type="text/plain"><tt>licenses.models</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.db">django.db</a>
@@ -44711,7 +44746,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.services"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/services.py" type="text/plain"><tt>licenses.services</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/services.py" type="text/plain"><tt>licenses.services</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#configparser">configparser</a>
@@ -44737,7 +44772,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.tests"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/tests.py" type="text/plain"><tt>licenses.tests</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/tests.py" type="text/plain"><tt>licenses.tests</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#datetime">datetime</a>
@@ -44764,7 +44799,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.urls"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/urls.py" type="text/plain"><tt>licenses.urls</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/urls.py" type="text/plain"><tt>licenses.urls</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#django.urls">django.urls</a>
@@ -44782,7 +44817,7 @@ imported by:
 
 <div class="node">
   <a name="licenses.views"></a>
-  <a target="code" href="///C:/Users/Billing%20System%202/Documents/MahilMartLicenseManagerWeb/licenses/views.py" type="text/plain"><tt>licenses.views</tt></a>
+  <a target="code" href="///C:/Users/Billing%20System%202/Documents/GitHub/License_Key/MahilMartLicenseManagerWeb/licenses/views.py" type="text/plain"><tt>licenses.views</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#datetime">datetime</a>
@@ -47000,6 +47035,7 @@ imported by:
  &#8226;   <a href="#importlib_resources.abc">importlib_resources.abc</a>
  &#8226;   <a href="#importlib_resources.future.adapters">importlib_resources.future.adapters</a>
  &#8226;   <a href="#importlib_resources.readers">importlib_resources.readers</a>
+ &#8226;   <a href="#license_manager_web.pwa_views">license_manager_web.pwa_views</a>
  &#8226;   <a href="#license_manager_web.settings">license_manager_web.settings</a>
  &#8226;   <a href="#licenses.services">licenses.services</a>
  &#8226;   <a href="#pathlib._abc">pathlib._abc</a>
