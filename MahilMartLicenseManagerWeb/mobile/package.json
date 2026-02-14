@@ -1,0 +1,23 @@
+{
+  "name": "mahilmart-license-mobile-wrapper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Capacitor wrapper for MahilMart License Manager web app.",
+  "scripts": {
+    "cap:doctor": "npx cap doctor",
+    "mobile:set-url": "node scripts/set-mobile-url.mjs",
+    "cap:sync": "npx cap sync",
+    "mobile:add:android": "npx cap add android",
+    "mobile:add:ios": "npx cap add ios",
+    "mobile:open:android": "npx cap open android",
+    "mobile:open:ios": "npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.2.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/ios": "^6.2.0"
+  }
+}

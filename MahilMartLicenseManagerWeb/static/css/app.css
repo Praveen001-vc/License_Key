@@ -142,6 +142,28 @@ button {
   background: rgba(255, 255, 255, 0.18);
 }
 
+.app-install-btn {
+  border-color: rgba(255, 255, 255, 0.38);
+  background: linear-gradient(120deg, #0ea5e9, #1d4ed8);
+}
+
+.app-install-btn:hover {
+  background: linear-gradient(120deg, #22b6f0, #2563eb);
+}
+
+.app-install-btn[hidden],
+.app-install-hint[hidden] {
+  display: none !important;
+}
+
+.app-install-hint {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #e8f1ff;
+  max-width: 360px;
+  line-height: 1.25;
+  white-space: normal;
+}
+
 .header-inline-form {
   margin: 0;
   display: inline-flex;
@@ -1336,6 +1358,10 @@ body.page-admin-setup .setup-footer i {
   .app-chip,
   .header-inline-form {
     width: 100%;
+  }
+
+  .app-install-hint {
+    max-width: none;
   }
 
   .app-btn,

@@ -86,3 +86,18 @@ Install on iOS (Safari):
 Important:
   - Service worker and install prompt require HTTPS in production.
   - localhost/127.0.0.1 works for development testing.
+
+Native Mobile App Build (APK / iOS app):
+  - Capacitor wrapper project is in: mobile\
+  - Detailed guide: mobile\README.md
+
+Quick build command (Windows):
+  1) Android:
+     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform android -AppUrl "https://your-domain.example.com"
+  2) iOS (macOS required for final iOS build):
+     powershell -ExecutionPolicy Bypass -File .\build_mobile_wrapper.ps1 -Platform ios -AppUrl "https://your-domain.example.com"
+
+Notes for native wrapper:
+  - AppUrl must be reachable from the mobile device.
+  - For release builds, use HTTPS URL.
+  - For local testing, LAN HTTP URL is allowed (example: http://192.168.1.10:8001).

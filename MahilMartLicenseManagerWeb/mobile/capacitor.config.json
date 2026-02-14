@@ -1,0 +1,10 @@
+{
+  "appId": "com.mahiltechlab.licensemanager",
+  "appName": "MahilMart License Manager",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://your-server-domain.example.com",
+    "cleartext": false
+  }
+}
