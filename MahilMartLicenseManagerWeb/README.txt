@@ -62,3 +62,27 @@ Optional environment variables:
   MAHILMARTPOS_LICENSE_MONGO_URI
   MAHILMARTPOS_LICENSE_MONGO_DB
   MAHILMARTPOS_LICENSE_MONGO_COLLECTION
+
+Mobile + Installable App (Android/iOS):
+  - Responsive layout is enabled for phone/tablet breakpoints.
+  - PWA files are enabled:
+      * /manifest.webmanifest
+      * /sw.js
+  - App icons:
+      * static/icons/icon-192.png
+      * static/icons/icon-512.png
+      * static/icons/apple-touch-icon.png
+
+Install on Android (Chrome):
+  1) Open the app URL in Chrome.
+  2) Tap menu -> "Install app" / "Add to Home screen".
+  3) Launch from home screen as standalone app.
+
+Install on iOS (Safari):
+  1) Open the app URL in Safari.
+  2) Tap Share -> "Add to Home Screen".
+  3) Launch from home screen (standalone mode).
+
+Important:
+  - Service worker and install prompt require HTTPS in production.
+  - localhost/127.0.0.1 works for development testing.

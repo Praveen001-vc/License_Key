@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from . import pwa_views
 
 urlpatterns = [
+    path("manifest.webmanifest", pwa_views.manifest, name="manifest"),
+    path("sw.js", pwa_views.service_worker, name="service_worker"),
     path('admin/', admin.site.urls),
     path("", include("licenses.urls")),
 ]

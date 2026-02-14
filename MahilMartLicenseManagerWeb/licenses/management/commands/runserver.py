@@ -1,7 +1,9 @@
 import os
 
 from django.core.management.base import CommandError
-from django.core.management.commands.runserver import Command as DjangoRunserverCommand
+from django.contrib.staticfiles.management.commands.runserver import (
+    Command as DjangoRunserverCommand,
+)
 
 
 class Command(DjangoRunserverCommand):

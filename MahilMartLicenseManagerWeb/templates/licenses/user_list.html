@@ -1,329 +1,100 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>User Management</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #12355b;
-      --primary-dark: #0a2540;
-      --accent: #1f7a8c;
-      --line: #dbe5f0;
-      --text-muted: #64748b;
-      --surface: #ffffff;
-      --bg: #edf2f7;
-    }
+{% extends "base.html" %}
 
-    * { box-sizing: border-box; }
+{% block title %}User Management | MahilMart License Manager{% endblock %}
+{% block body_class %}page-user-list{% endblock %}
 
-    body {
-      margin: 0;
-      background: radial-gradient(circle at 0% 0%, #e5eefc 0%, #edf2f7 42%, #e2e8f0 100%);
-      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      color: #0f172a;
-      min-height: 100vh;
-    }
+{% block header_icon %}<i class="fas fa-users-cog"></i>{% endblock %}
+{% block header_title %}User Management{% endblock %}
+{% block header_actions %}
+  <a class="app-btn" href="{% url 'licenses:dashboard' %}"><i class="fas fa-gauge"></i>Dashboard</a>
+  <a class="app-btn" href="{% url 'licenses:user_create' %}"><i class="fas fa-user-plus"></i>Create User</a>
+  <form method="post" action="{% url 'licenses:logout' %}" class="header-inline-form">
+    {% csrf_token %}
+    <button class="app-btn" type="submit"><i class="fas fa-right-from-bracket"></i>Logout</button>
+  </form>
+{% endblock %}
 
-    .topbar {
-      background: linear-gradient(120deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-    }
-
-    .brand {
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .top-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn-bar {
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-bar:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    .wrap {
-      width: min(1300px, 96vw);
-      margin: 16px auto;
-    }
-
-    .panel {
-      background: var(--surface);
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .panel h1 {
-      font-size: 24px;
-      margin: 0 0 10px;
-    }
-
-    .filters {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .filters input {
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px 12px;
-      width: 100%;
-    }
-
-    .btn-main {
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-weight: 700;
-      background: linear-gradient(120deg, #1d4ed8, #0ea5e9);
-      color: #fff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-
-    .btn-main:hover {
-      color: #fff;
-      filter: brightness(1.04);
-    }
-
-    .stats {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #fff;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 11px 9px;
-      border-bottom: 1px solid #edf2f7;
-      font-size: 13px;
-    }
-
-    th {
-      text-transform: uppercase;
-      font-size: 12px;
-      color: var(--text-muted);
-      background: #f8fbff;
-    }
-
-    tbody tr:hover { background: #f8fbff; }
-
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 999px;
-      padding: 4px 8px;
-      border: 1px solid #dbe5f0;
-      background: #f8fafc;
-      color: #1f2937;
-    }
-
-    .tag.admin { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
-    .tag.supervisor { border-color: #bfdbfe; background: #eff6ff; color: #1e3a8a; }
-    .tag.cashier { border-color: #ccfbf1; background: #f0fdfa; color: #115e59; }
-
-    .tag.active { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
-    .tag.inactive { border-color: #e5e7eb; background: #f9fafb; color: #6b7280; }
-
-    .btn-table {
-      border: 1px solid #dbe5f0;
-      border-radius: 9px;
-      padding: 6px 10px;
-      text-decoration: none;
-      color: #0f172a;
-      background: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .btn-table:hover {
-      color: #0f172a;
-      background: #f8fbff;
-    }
-
-    .pagination-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .pager {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-    }
-
-    .pager a {
-      text-decoration: none;
-      border: 1px solid #dbe5f0;
-      border-radius: 8px;
-      padding: 6px 10px;
-      color: #0f172a;
-      background: #fff;
-    }
-
-    .messages .alert {
-      border-radius: 10px;
-    }
-
-    @media (max-width: 900px) {
-      .filters {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <i class="fas fa-users-cog"></i>
-      <span>User Management</span>
-    </div>
-    <div class="top-actions">
-      <a class="btn-bar" href="{% url 'licenses:dashboard' %}"><i class="fas fa-gauge"></i>Dashboard</a>
-      <a class="btn-bar" href="{% url 'licenses:user_create' %}"><i class="fas fa-user-plus"></i>Create User</a>
-      <form method="post" action="{% url 'licenses:logout' %}" style="margin:0;">
-        {% csrf_token %}
-        <button class="btn-bar" type="submit"><i class="fas fa-right-from-bracket"></i>Logout</button>
-      </form>
-    </div>
-  </header>
-
-  <main class="wrap">
-    {% if messages %}
-      <div class="messages panel">
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
+{% block content %}
+  {% if messages %}
     <section class="panel">
-      <h1>Users</h1>
-      <form method="get" class="filters">
-        <input type="text" name="q" value="{{ query }}" placeholder="Search username or email">
-        <button class="btn-main" type="submit"><i class="fas fa-magnifying-glass"></i>Search</button>
-        <a class="btn-main" href="{% url 'licenses:user_list' %}"><i class="fas fa-rotate-right"></i>Reset</a>
-      </form>
-      <div class="stats">Total users: {{ total_users }}</div>
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-2">{{ message }}</div>
+      {% endfor %}
     </section>
+  {% endif %}
 
-    <section class="panel">
-      <div class="table-responsive">
-        <table>
-          <thead>
+  <section class="panel">
+    <h1 class="section-title">Users</h1>
+    <form method="get" class="user-list-filters">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search username or email">
+      <button class="action-btn action-btn-primary" type="submit"><i class="fas fa-magnifying-glass"></i>Search</button>
+      <a class="action-btn action-btn-primary" href="{% url 'licenses:user_list' %}"><i class="fas fa-rotate-right"></i>Reset</a>
+    </form>
+    <div class="section-meta">Total users: {{ total_users }}</div>
+  </section>
+
+  <section class="panel user-list-table-panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in page_obj %}
             <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Last Login</th>
-              <th>Actions</th>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email|default:"-" }}</td>
+              <td>
+                {% if user.is_superuser %}
+                  <span class="pill pill-admin">Admin</span>
+                {% elif user.is_staff %}
+                  <span class="pill pill-supervisor">Supervisor</span>
+                {% else %}
+                  <span class="pill pill-cashier">Cashier</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.is_active %}
+                  <span class="pill pill-active">Active</span>
+                {% else %}
+                  <span class="pill pill-inactive">Inactive</span>
+                {% endif %}
+              </td>
+              <td>{% if user.last_login %}{{ user.last_login|date:"Y-m-d H:i:s" }}{% else %}-{% endif %}</td>
+              <td>
+                <a class="table-btn" href="{% url 'licenses:user_edit' user.id %}">
+                  <i class="fas fa-pen"></i>Edit
+                </a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for user in page_obj %}
-              <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email|default:"-" }}</td>
-                <td>
-                  {% if user.is_superuser %}
-                    <span class="tag admin">Admin</span>
-                  {% elif user.is_staff %}
-                    <span class="tag supervisor">Supervisor</span>
-                  {% else %}
-                    <span class="tag cashier">Cashier</span>
-                  {% endif %}
-                </td>
-                <td>
-                  {% if user.is_active %}
-                    <span class="tag active">Active</span>
-                  {% else %}
-                    <span class="tag inactive">Inactive</span>
-                  {% endif %}
-                </td>
-                <td>{% if user.last_login %}{{ user.last_login|date:"Y-m-d H:i:s" }}{% else %}-{% endif %}</td>
-                <td>
-                  <a class="btn-table" href="{% url 'licenses:user_edit' user.id %}">
-                    <i class="fas fa-pen"></i>Edit
-                  </a>
-                </td>
-              </tr>
-            {% empty %}
-              <tr>
-                <td colspan="7">No users found.</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+          {% empty %}
+            <tr>
+              <td colspan="7">No users found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-      <div class="pagination-row">
-        <div>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
-        <div class="pager">
-          {% if page_obj.has_previous %}
-            <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}">Prev</a>
-          {% endif %}
-          {% if page_obj.has_next %}
-            <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}">Next</a>
-          {% endif %}
-        </div>
+    <div class="pagination-row">
+      <div>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
+      <div class="pager">
+        {% if page_obj.has_previous %}
+          <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}">Prev</a>
+        {% endif %}
+        {% if page_obj.has_next %}
+          <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
       </div>
-    </section>
-  </main>
-</body>
-</html>
+    </div>
+  </section>
+{% endblock %}
