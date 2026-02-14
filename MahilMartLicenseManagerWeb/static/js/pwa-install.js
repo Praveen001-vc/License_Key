@@ -8,6 +8,7 @@
   var isIOS = /iphone|ipad|ipod/.test(ua);
   var isIOSChromeFamily = /crios|fxios|edgios|opios/.test(ua);
   var isIOSSafari = isIOS && /safari/.test(ua) && !isIOSChromeFamily;
+  var isIOSOtherBrowser = isIOS && !isIOSSafari;
   var isAndroidChrome = /android/.test(ua) && /chrome/.test(ua) && !/edg|opr/.test(ua);
   var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   var isLocalhost = location.hostname === "127.0.0.1" || location.hostname === "localhost";
@@ -67,7 +68,12 @@
     }
 
     if (isIOSSafari) {
-      showHintTemporary("iPhone/iPad: tap Share and choose Add to Home Screen.");
+      showHintTemporary("iOS shortcut: tap Share and choose Add to Home Screen.");
+      return;
+    }
+
+    if (isIOSOtherBrowser) {
+      showHintTemporary("On iPhone/iPad, open this site in Safari and use Share > Add to Home Screen.");
       return;
     }
 
@@ -83,9 +89,8 @@
     showHintTemporary("Install option not available in this browser. Use Chrome on Android.");
   });
 
-  if (isIOSSafari) {
-    showInstallButton("Add to Home Screen");
-    showHint("iPhone/iPad: tap Share and choose Add to Home Screen.");
+  if (isIOS) {
+    showInstallButton("Install Shortcut");
     return;
   }
 

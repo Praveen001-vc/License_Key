@@ -36,7 +36,6 @@
           <i class="fas fa-download"></i>
           <span>Install App</span>
         </button>
-        <span id="pwaInstallHint" class="app-chip app-install-hint" hidden></span>
       </div>
     </div>
   </header>
@@ -45,6 +44,7 @@
   <main class="{% block main_class %}page-container{% endblock %}">
     {% block content %}{% endblock %}
   </main>
+  <div id="pwaInstallHint" class="app-install-toast" hidden></div>
 
   {% block scripts %}{% endblock %}
   <script>
