@@ -27,6 +27,15 @@
     hintNode.hidden = false;
   }
 
+  function showHintTemporary(text, timeoutMs) {
+    if (!hintNode) return;
+    showHint(text);
+    var delay = Number(timeoutMs) > 0 ? Number(timeoutMs) : 5000;
+    window.setTimeout(function () {
+      hintNode.hidden = true;
+    }, delay);
+  }
+
   function hideInstallControls() {
     installButton.hidden = true;
     if (hintNode) hintNode.hidden = true;
@@ -41,13 +50,6 @@
     event.preventDefault();
     deferredPrompt = event;
     showInstallButton("Install App");
-    if (!hasSecureContext) {
-      if (isAndroidChrome) {
-        showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
-      } else {
-        showHint("Use HTTPS for reliable install support.");
-      }
-    }
   });
 
   window.addEventListener("appinstalled", function () {
@@ -65,20 +67,20 @@
     }
 
     if (isIOSSafari) {
-      showHint("iPhone/iPad: tap Share and choose Add to Home Screen.");
+      showHintTemporary("iPhone/iPad: tap Share and choose Add to Home Screen.");
       return;
     }
 
     if (!hasSecureContext) {
       if (isAndroidChrome) {
-        showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
+        showHintTemporary("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
       } else {
-        showHint("Install prompt may be blocked on non-HTTPS pages.");
+        showHintTemporary("Use HTTPS to enable browser install.");
       }
       return;
     }
 
-    showHint("Install option not available in this browser. Use Chrome on Android.");
+    showHintTemporary("Install option not available in this browser. Use Chrome on Android.");
   });
 
   if (isIOSSafari) {
@@ -89,10 +91,5 @@
 
   if (!hasSecureContext) {
     showInstallButton("Install App");
-    if (isAndroidChrome) {
-      showHint("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
-    } else {
-      showHint("Switch to HTTPS for best install support.");
-    }
   }
 })();
