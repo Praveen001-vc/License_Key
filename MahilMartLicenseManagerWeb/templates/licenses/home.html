@@ -93,8 +93,8 @@
                 <label for="password">Password</label>
                 <div class="input-with-icon">
                   <i class="fas fa-lock"></i>
-                  <input type="password" id="password" name="password" required placeholder="Enter your password">
-                  <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                  <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+                  <i class="fas fa-eye toggle-password" onclick="togglePassword()" aria-label="Show password"></i>
                 </div>
               </div>
 
@@ -122,15 +122,11 @@
       const pwd = document.getElementById("password");
       const eye = document.querySelector(".toggle-password");
       if (!pwd || !eye) return;
-      if (pwd.type === "password") {
-        pwd.type = "text";
-        eye.classList.remove("fa-eye");
-        eye.classList.add("fa-eye-slash");
-      } else {
-        pwd.type = "password";
-        eye.classList.remove("fa-eye-slash");
-        eye.classList.add("fa-eye");
-      }
+      const showing = pwd.type === "text";
+      pwd.type = showing ? "password" : "text";
+      eye.classList.toggle("fa-eye", showing);
+      eye.classList.toggle("fa-eye-slash", !showing);
+      eye.setAttribute("aria-label", showing ? "Show password" : "Hide password");
     }
 
     function fmt(value) {

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "mmlm-v3";
+const CACHE_VERSION = "mmlm-v6";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const FALLBACK_CACHE = `fallback-${CACHE_VERSION}`;
 

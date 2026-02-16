@@ -981,9 +981,15 @@ body.page-login .input-with-icon i {
   color: #7b8794;
 }
 
+body.page-login .input-with-icon .toggle-password {
+  left: auto;
+  right: 14px;
+  color: #1f2937;
+}
+
 body.page-login .login-form input {
   width: 100%;
-  padding: 13px 14px 13px 46px;
+  padding: 13px 50px 13px 46px;
   min-height: 46px;
   border: 1px solid var(--line);
   border-radius: 11px;
@@ -1000,9 +1006,25 @@ body.page-login .login-form input:focus {
 }
 
 body.page-login .toggle-password {
-  left: auto;
+  position: absolute;
   right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: #1f2937;
+  opacity: 0.8;
+  font-size: 18px;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+body.page-login .toggle-password:hover {
+  opacity: 1;
 }
 
 body.page-login .login-btn {
@@ -1279,9 +1301,16 @@ body.page-admin-setup .form-control:focus {
 }
 
 body.page-admin-setup .toggle-password {
-  left: auto;
+  position: absolute;
   right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7b8794;
 }
 
 body.page-admin-setup .btn-primary {
