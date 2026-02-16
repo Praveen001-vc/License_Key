@@ -9,6 +9,9 @@
   var isIOSChromeFamily = /crios|fxios|edgios|opios/.test(ua);
   var isIOSSafari = isIOS && /safari/.test(ua) && !isIOSChromeFamily;
   var isIOSOtherBrowser = isIOS && !isIOSSafari;
+  var isAndroid = /android/.test(ua);
+  var isMobile = isAndroid || isIOS;
+  var isDesktopChromium = !isMobile && /(?:chrome|edg)\//.test(ua);
   var isAndroidChrome = /android/.test(ua) && /chrome/.test(ua) && !/edg|opr/.test(ua);
   var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
   var hostname = (location.hostname || "").toLowerCase();
@@ -67,8 +70,17 @@
 
   installButton.addEventListener("click", function () {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(function () {
+      try {
+        deferredPrompt.prompt();
+      } catch (err) {
+        deferredPrompt = null;
+        showHintTemporary("Install prompt blocked. Use browser menu (...) > Install app.");
+        return;
+      }
+
+      Promise.resolve(deferredPrompt.userChoice).catch(function () {
+        return null;
+      }).finally(function () {
         deferredPrompt = null;
       });
       return;
@@ -85,7 +97,9 @@
     }
 
     if (!hasSecureContext) {
-      if (isAndroidChrome) {
+      if (!isMobile && isPrivateIpv4) {
+        showHintTemporary("For PC install, open http://localhost:8001 on this same PC.");
+      } else if (isAndroidChrome) {
         showHintTemporary("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
       } else {
         showHintTemporary("Use HTTPS to enable browser install.");
@@ -93,7 +107,17 @@
       return;
     }
 
-    showHintTemporary("Install option not available in this browser. Use Chrome on Android.");
+    if (isDesktopChromium) {
+      showHintTemporary("If prompt is not shown, use browser menu (...) > Install app.");
+      return;
+    }
+
+    if (isAndroid) {
+      showHintTemporary("Install prompt not ready yet. Refresh and try again.");
+      return;
+    }
+
+    showHintTemporary("Install is not supported in this browser.");
   });
 
   if (isIOS) {
@@ -102,7 +126,9 @@
   }
 
   if (!hasSecureContext) {
-    if (isAndroidChrome && isPrivateIpv4) {
+    if (!isMobile && isPrivateIpv4) {
+      showHint("For PC install, open http://localhost:8001 on this same PC.");
+    } else if (isAndroidChrome && isPrivateIpv4) {
       showHint(
         "Install App needs HTTPS. On Android, http://IP links cannot trigger install prompt."
       );
@@ -110,5 +136,8 @@
       showHint("Install App requires HTTPS or localhost.");
     }
     installButton.hidden = true;
+    return;
   }
+
+  showInstallButton("Install App");
 })();

@@ -172,9 +172,17 @@ def main():
     from django.core.management import execute_from_command_line
 
     browser_host = _detect_machine_ip() or "127.0.0.1"
+    preferred_open_host = (os.environ.get("LICENSE_MANAGER_BROWSER_HOST") or "127.0.0.1").strip()
+    preferred_open_host_lower = preferred_open_host.lower()
+    if preferred_open_host_lower in {"", "local", "localhost"}:
+        preferred_open_host = "127.0.0.1"
+    elif preferred_open_host_lower == "ip":
+        preferred_open_host = browser_host
+
     os.environ["LICENSE_MANAGER_ALLOW_IP_MODE"] = "1"
     os.environ["LICENSE_MANAGER_ALLOWED_HOSTS"] = _merge_allowed_hosts(
         os.environ.get("LICENSE_MANAGER_ALLOWED_HOSTS", ""),
+        preferred_open_host,
         browser_host,
         "127.0.0.1",
         "localhost",
@@ -183,7 +191,7 @@ def main():
     django_setup()
     _run_migrations_if_needed()
 
-    app_url = f"http://{browser_host}:{APP_PORT}/"
+    app_url = f"http://{preferred_open_host}:{APP_PORT}/"
 
     threading.Thread(target=_open_browser, args=(app_url,), daemon=True).start()
     execute_from_command_line(
