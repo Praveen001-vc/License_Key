@@ -39,8 +39,8 @@ EXE notes:
   - Launcher file: app_launcher.py
   - PyInstaller spec: MahilMartLicenseManagerWeb.spec
   - EXE enables IP mode automatically and runs on 0.0.0.0:8001
-  - EXE opens local URL by default: http://127.0.0.1:8001 (better for browser install)
-  - To force opening LAN IP, set LICENSE_MANAGER_BROWSER_HOST=ip
+  - EXE opens LAN IP URL by default (POS style)
+  - To force opening local URL, set LICENSE_MANAGER_BROWSER_HOST=local
   - EXE reads PostgreSQL config from db_config.env when installed
   - If db_config.env is missing, EXE falls back to writable SQLite at %LOCALAPPDATA%\MahilMartLicenseManagerWeb\db.sqlite3
 

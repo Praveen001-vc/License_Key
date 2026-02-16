@@ -97,10 +97,10 @@
     }
 
     if (!hasSecureContext) {
-      if (!isMobile && isPrivateIpv4) {
-        showHintTemporary("For PC install, open http://localhost:8001 on this same PC.");
-      } else if (isAndroidChrome) {
+      if (isAndroidChrome) {
         showHintTemporary("Chrome blocks install on http://IP links. Use HTTPS or native APK.");
+      } else if (!isMobile && isPrivateIpv4) {
+        showHintTemporary("Install App on IP needs HTTPS. Use HTTPS URL or installer app.");
       } else {
         showHintTemporary("Use HTTPS to enable browser install.");
       }
@@ -126,12 +126,12 @@
   }
 
   if (!hasSecureContext) {
-    if (!isMobile && isPrivateIpv4) {
-      showHint("For PC install, open http://localhost:8001 on this same PC.");
-    } else if (isAndroidChrome && isPrivateIpv4) {
+    if (isAndroidChrome && isPrivateIpv4) {
       showHint(
         "Install App needs HTTPS. On Android, http://IP links cannot trigger install prompt."
       );
+    } else if (!isMobile && isPrivateIpv4) {
+      showHint("Install App on IP needs HTTPS. Use HTTPS URL or installer app.");
     } else {
       showHint("Install App requires HTTPS or localhost.");
     }
