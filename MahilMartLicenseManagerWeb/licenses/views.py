@@ -150,6 +150,30 @@ def _merge_recent_licenses(local_items, mongo_items, limit=100):
     return deduped
 
 
+def _annotate_license_status(licenses):
+    now_local = timezone.localtime()
+    for item in licenses:
+        generated_at = _record_value(item, "generated_at")
+        valid_until = _record_value(item, "valid_until")
+        if valid_until is None and generated_at is not None:
+            valid_until = calculate_license_valid_until(generated_at)
+
+        valid_until_local = _record_local_datetime(valid_until) if valid_until is not None else None
+        is_valid = bool(valid_until_local and valid_until_local >= now_local)
+
+        _record_set(item, "valid_until", valid_until_local)
+        _record_set(item, "status", "valid" if is_valid else "expired")
+
+    return licenses
+
+
+def _load_recent_licenses(limit=100):
+    local_licenses = list(GeneratedLicense.objects.all()[:limit])
+    mongo_licenses = fetch_recent_mongo_licenses(limit=limit)
+    merged_licenses = _merge_recent_licenses(local_licenses, mongo_licenses, limit=limit)
+    return _annotate_license_status(merged_licenses)
+
+
 def login_view(request):
     if not User.objects.filter(is_superuser=True).exists():
         return redirect("licenses:initial_admin_setup")
@@ -258,6 +282,14 @@ def dashboard_view(request):
         "contact_email": "",
         "note": "",
     }
+    form_values.update(
+        {
+            "machine_id": normalize_machine_id(request.GET.get("machine_id")),
+            "customer_name": (request.GET.get("customer_name") or "").strip(),
+            "contact_email": (request.GET.get("contact_email") or "").strip().lower(),
+            "note": (request.GET.get("note") or "").strip(),
+        }
+    )
     mongo_form_values = get_runtime_mongo_config()
 
     if request.method == "POST":
@@ -363,33 +395,36 @@ def dashboard_view(request):
                 if not synced:
                     messages.warning(request, sync_message)
 
-    local_licenses = list(GeneratedLicense.objects.all()[:100])
-    mongo_licenses = fetch_recent_mongo_licenses(limit=100)
-    recent_licenses = _merge_recent_licenses(local_licenses, mongo_licenses, limit=100)
-    now_local = timezone.localtime()
-    for item in recent_licenses:
-        generated_at = _record_value(item, "generated_at")
-        valid_until = _record_value(item, "valid_until")
-        if valid_until is None and generated_at is not None:
-            valid_until = calculate_license_valid_until(generated_at)
+    all_recent_licenses = _load_recent_licenses(limit=100)
+    recent_licenses = [
+        item for item in all_recent_licenses if _record_value(item, "status") == "valid"
+    ]
+    expired_keys_count = len(all_recent_licenses) - len(recent_licenses)
 
-        valid_until_local = _record_local_datetime(valid_until) if valid_until is not None else None
-        is_valid = bool(valid_until_local and valid_until_local >= now_local)
-
-        _record_set(item, "valid_until", valid_until_local)
-        _record_set(item, "status", "valid" if is_valid else "expired")
-
-    total_keys = len(recent_licenses)
+    total_keys = len(all_recent_licenses)
     today = timezone.localtime().date()
-    today_keys = sum(1 for item in recent_licenses if _record_local_date(_record_value(item, "generated_at")) == today)
-    unique_machines = len({_record_value(item, "machine_id") for item in recent_licenses if _record_value(item, "machine_id")})
-    last_generated = _record_value(recent_licenses[0], "generated_at") if recent_licenses else None
+    today_keys = sum(
+        1
+        for item in all_recent_licenses
+        if _record_local_date(_record_value(item, "generated_at")) == today
+    )
+    unique_machines = len(
+        {
+            _record_value(item, "machine_id")
+            for item in all_recent_licenses
+            if _record_value(item, "machine_id")
+        }
+    )
+    last_generated = (
+        _record_value(all_recent_licenses[0], "generated_at") if all_recent_licenses else None
+    )
 
     context = {
         "license_email": settings.LICENSE_EMAIL,
         "generated_key": generated_key,
         "generated_machine": generated_machine,
         "recent_licenses": recent_licenses,
+        "expired_keys_count": expired_keys_count,
         "total_keys": total_keys,
         "today_keys": today_keys,
         "unique_machines": unique_machines,
@@ -398,6 +433,20 @@ def dashboard_view(request):
         "mongo_form_values": mongo_form_values,
     }
     return render(request, "licenses/dashboard.html", context)
+
+
+@login_required(login_url="licenses:login")
+def expired_keys_view(request):
+    recent_licenses = _load_recent_licenses(limit=100)
+    expired_licenses = [
+        item for item in recent_licenses if _record_value(item, "status") == "expired"
+    ]
+
+    context = {
+        "expired_licenses": expired_licenses,
+        "expired_total": len(expired_licenses),
+    }
+    return render(request, "licenses/expired_keys.html", context)
 
 
 @login_required(login_url="licenses:login")

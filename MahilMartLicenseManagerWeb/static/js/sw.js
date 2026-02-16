@@ -1,4 +1,4 @@
-const CACHE_VERSION = "mmlm-v1";
+const CACHE_VERSION = "mmlm-v2";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const FALLBACK_CACHE = `fallback-${CACHE_VERSION}`;
 
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
   "/static/icons/icon-512.png",
   "/static/icons/apple-touch-icon.png",
   "/static/icons/favicon-32.png",
+  "/static/icons/favicon.ico",
 ];
 
 self.addEventListener("install", (event) => {
@@ -36,7 +37,7 @@ function isStaticRequest(request) {
   return (
     url.pathname.startsWith("/static/") ||
     url.pathname === "/manifest.webmanifest" ||
-    /\.(?:css|js|png|jpg|jpeg|svg|webmanifest|woff2?)$/i.test(url.pathname)
+    /\.(?:css|js|ico|png|jpg|jpeg|svg|webmanifest|woff2?)$/i.test(url.pathname)
   );
 }
 

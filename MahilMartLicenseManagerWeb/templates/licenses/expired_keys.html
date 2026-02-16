@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Expired Keys | MahilMart License Manager{% endblock %}
+{% block body_class %}page-dashboard{% endblock %}
+
+{% block header_icon %}<i class="fas fa-hourglass-end"></i>{% endblock %}
+{% block header_title %}Expired License Keys{% endblock %}
+{% block header_actions %}
+  <span class="app-chip"><i class="fas fa-user"></i>User: {{ request.user.username }}</span>
+  <a href="{% url 'licenses:dashboard' %}" class="app-btn"><i class="fas fa-gauge"></i>Dashboard</a>
+  {% if request.user.is_superuser %}
+    <a href="{% url 'licenses:user_list' %}" class="app-btn"><i class="fas fa-users"></i>Users</a>
+  {% endif %}
+  <form method="post" action="{% url 'licenses:logout' %}" class="header-inline-form">
+    {% csrf_token %}
+    <button type="submit" class="app-btn"><i class="fas fa-right-from-bracket"></i>Logout</button>
+  </form>
+{% endblock %}
+
+{% block content %}
+  <section class="panel dashboard-intro">
+    <h1>Expired Keys</h1>
+    <p>All keys below are outside their validity window.</p>
+    <div class="section-meta">Total expired keys: {{ expired_total }}</div>
+  </section>
+
+  <section class="panel dashboard-mongo">
+    <h2 class="dashboard-panel-title">Expired Key History</h2>
+    <div class="table-wrap">
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>License Key</th>
+            <th>Machine</th>
+            <th>Customer</th>
+            <th>Contact Email</th>
+            <th>Note</th>
+            <th>Valid Until</th>
+            <th>Status</th>
+            <th>Source</th>
+            <th>At</th>
+            <th>By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in expired_licenses %}
+            <tr>
+              <td>{{ item.license_key }}</td>
+              <td>{{ item.machine_id }}</td>
+              <td>{{ item.customer_name|default:"-" }}</td>
+              <td>{{ item.contact_email|default:"-" }}</td>
+              <td>{{ item.note|default:"-" }}</td>
+              <td>{% if item.valid_until %}{{ item.valid_until|date:"Y-m-d H:i:s" }}{% else %}-{% endif %}</td>
+              <td>{{ item.status|default:"-" }}</td>
+              <td>{{ item.source|default:"-" }}</td>
+              <td>{{ item.generated_at|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ item.generated_by|default:"-" }}</td>
+              <td>
+                <a
+                  class="table-btn"
+                  href="{% url 'licenses:dashboard' %}?machine_id={{ item.machine_id|urlencode }}&customer_name={{ item.customer_name|default_if_none:''|urlencode }}&contact_email={{ item.contact_email|default_if_none:''|urlencode }}&note={{ item.note|default_if_none:''|urlencode }}"
+                >
+                  <i class="fas fa-pen-to-square"></i>Edit
+                </a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="11">No expired keys found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

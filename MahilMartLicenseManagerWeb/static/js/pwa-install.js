@@ -11,8 +11,15 @@
   var isIOSOtherBrowser = isIOS && !isIOSSafari;
   var isAndroidChrome = /android/.test(ua) && /chrome/.test(ua) && !/edg|opr/.test(ua);
   var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-  var isLocalhost = location.hostname === "127.0.0.1" || location.hostname === "localhost";
-  var hasSecureContext = location.protocol === "https:" || isLocalhost;
+  var hostname = (location.hostname || "").toLowerCase();
+  var isLoopbackHost =
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "::1" ||
+    hostname.endsWith(".localhost");
+  var isPrivateIpv4 =
+    /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(hostname);
+  var hasSecureContext = window.isSecureContext === true || isLoopbackHost;
 
   function showInstallButton(labelText) {
     var label = installButton.querySelector("span");
@@ -95,6 +102,13 @@
   }
 
   if (!hasSecureContext) {
-    showInstallButton("Install App");
+    if (isAndroidChrome && isPrivateIpv4) {
+      showHint(
+        "Install App needs HTTPS. On Android, http://IP links cannot trigger install prompt."
+      );
+    } else {
+      showHint("Install App requires HTTPS or localhost.");
+    }
+    installButton.hidden = true;
   }
 })();

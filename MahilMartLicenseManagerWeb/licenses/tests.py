@@ -76,6 +76,7 @@ class AuthWorkflowTests(TestCase):
         self.login_url = reverse("licenses:login")
         self.setup_url = reverse("licenses:initial_admin_setup")
         self.dashboard_url = reverse("licenses:dashboard")
+        self.expired_url = reverse("licenses:expired_keys")
         self.user_model = get_user_model()
 
     def test_login_redirects_to_admin_setup_when_superuser_missing(self):
@@ -133,10 +134,21 @@ class AuthWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("licenses:login"), response["Location"])
 
+    def test_expired_keys_page_requires_login(self):
+        self.user_model.objects.create_superuser(
+            username="root",
+            email="root@example.com",
+            password="secure-pass-123",
+        )
+        response = self.client.get(self.expired_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("licenses:login"), response["Location"])
+
 
 class DashboardViewTests(TestCase):
     def setUp(self):
         self.url = reverse("licenses:dashboard")
+        self.expired_url = reverse("licenses:expired_keys")
         self.user = get_user_model().objects.create_user(
             username="operator_one",
             password="strong-password-123",
@@ -145,6 +157,9 @@ class DashboardViewTests(TestCase):
 
     def _messages(self, response):
         return [message.message for message in get_messages(response.wsgi_request)]
+
+    def _record_value(self, item, key):
+        return item.get(key) if isinstance(item, dict) else getattr(item, key)
 
     @patch("licenses.views.fetch_recent_mongo_licenses", return_value=[])
     def test_get_dashboard_with_empty_state(self, _mongo_fetch_mock):
@@ -155,6 +170,25 @@ class DashboardViewTests(TestCase):
         self.assertEqual(response.context["today_keys"], 0)
         self.assertEqual(response.context["unique_machines"], 0)
         self.assertIsNone(response.context["last_generated"])
+
+    @patch("licenses.views.fetch_recent_mongo_licenses", return_value=[])
+    def test_dashboard_prefills_form_from_query_parameters(self, _mongo_fetch_mock):
+        response = self.client.get(
+            self.url,
+            {
+                "machine_id": " desktop-123 ",
+                "customer_name": "  Alice  ",
+                "contact_email": "ALICE@EXAMPLE.COM ",
+                "note": "  renew key  ",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        form_values = response.context["form_values"]
+        self.assertEqual(form_values["machine_id"], "DESKTOP-123")
+        self.assertEqual(form_values["customer_name"], "Alice")
+        self.assertEqual(form_values["contact_email"], "alice@example.com")
+        self.assertEqual(form_values["note"], "renew key")
 
     def test_post_invalid_machine_id_shows_error_without_creating_license(self):
         response = self.client.post(self.url, {"machine_id": "ab!"}, follow=True)
@@ -424,7 +458,7 @@ class DashboardViewTests(TestCase):
         mongo_fetch_mock.assert_called_once_with(limit=100)
 
     @patch("licenses.views.fetch_recent_mongo_licenses", return_value=[])
-    def test_dashboard_marks_expired_status_when_validity_window_passed(
+    def test_dashboard_hides_expired_items_from_recent_list(
         self, _mongo_fetch_mock
     ):
         item = GeneratedLicense.objects.create(
@@ -445,9 +479,36 @@ class DashboardViewTests(TestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, 200)
-        first_item = response.context["recent_licenses"][0]
-        status = first_item.status if hasattr(first_item, "status") else first_item["status"]
-        self.assertEqual(status, "expired")
+        self.assertEqual(response.context["total_keys"], 1)
+        self.assertEqual(response.context["expired_keys_count"], 1)
+        self.assertEqual(len(response.context["recent_licenses"]), 0)
+
+    @patch("licenses.views.fetch_recent_mongo_licenses", return_value=[])
+    def test_expired_keys_page_lists_expired_items(self, _mongo_fetch_mock):
+        item = GeneratedLicense.objects.create(
+            machine_id="DESKTOP-OLD1",
+            license_key="ExpiredKey123@abc",
+            customer_name="Expired User",
+            contact_email="expired@example.com",
+            note="expired",
+            generated_by="web_user",
+            status="valid",
+            source="license_manager_page",
+        )
+        GeneratedLicense.objects.filter(id=item.id).update(
+            generated_at=timezone.now() - timedelta(minutes=30),
+            valid_until=timezone.now() - timedelta(minutes=20),
+        )
+
+        response = self.client.get(self.expired_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["expired_total"], 1)
+        first_item = response.context["expired_licenses"][0]
+        self.assertEqual(self._record_value(first_item, "status"), "expired")
+        self.assertEqual(self._record_value(first_item, "machine_id"), "DESKTOP-OLD1")
+        self.assertContains(response, reverse("licenses:dashboard"))
+        self.assertContains(response, "machine_id=DESKTOP-OLD1")
 
 
 class UserManagementTests(TestCase):
