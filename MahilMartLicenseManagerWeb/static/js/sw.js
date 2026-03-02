@@ -1,8 +1,8 @@
-const CACHE_VERSION = "mmlm-v6";
-const STATIC_CACHE = `static-${CACHE_VERSION}`;
-const FALLBACK_CACHE = `fallback-${CACHE_VERSION}`;
+const CACHE_VERSION = "mmlm-v8";
+const SHELL_CACHE = `shell-${CACHE_VERSION}`;
+const RUNTIME_CACHE = `runtime-${CACHE_VERSION}`;
 
-const STATIC_ASSETS = [
+const SHELL_ASSETS = [
   "/",
   "/manifest.webmanifest",
   "/static/css/app.css",
@@ -13,9 +13,37 @@ const STATIC_ASSETS = [
   "/static/icons/favicon.ico",
 ];
 
+function isSameOrigin(request) {
+  const url = new URL(request.url);
+  return url.origin === self.location.origin;
+}
+
+function isCssOrJs(request) {
+  if (!isSameOrigin(request)) return false;
+  const url = new URL(request.url);
+  return /\.(?:css|js)$/i.test(url.pathname);
+}
+
+function isStaticAsset(request) {
+  if (!isSameOrigin(request)) return false;
+  const url = new URL(request.url);
+  return (
+    url.pathname.startsWith("/static/") ||
+    url.pathname === "/manifest.webmanifest" ||
+    /\.(?:ico|png|jpg|jpeg|svg|webmanifest|woff2?)$/i.test(url.pathname)
+  );
+}
+
+async function putInRuntimeCache(request, response) {
+  if (!response || !response.ok) return response;
+  const cache = await caches.open(RUNTIME_CACHE);
+  await cache.put(request, response.clone());
+  return response;
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(STATIC_ASSETS)).then(() => self.skipWaiting())
+    caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL_ASSETS)).then(() => self.skipWaiting())
   );
 });
 
@@ -24,22 +52,12 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== STATIC_CACHE && key !== FALLBACK_CACHE)
+          .filter((key) => key !== SHELL_CACHE && key !== RUNTIME_CACHE)
           .map((key) => caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );
 });
-
-function isStaticRequest(request) {
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return false;
-  return (
-    url.pathname.startsWith("/static/") ||
-    url.pathname === "/manifest.webmanifest" ||
-    /\.(?:css|js|ico|png|jpg|jpeg|svg|webmanifest|woff2?)$/i.test(url.pathname)
-  );
-}
 
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -47,31 +65,40 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate") {
     event.respondWith(
+      fetch(request).catch(async () => {
+        const cache = await caches.open(SHELL_CACHE);
+        const fallback = await cache.match("/");
+        return fallback || Response.error();
+      })
+    );
+    return;
+  }
+
+  if (isCssOrJs(request)) {
+    event.respondWith(
       fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(FALLBACK_CACHE).then((cache) => cache.put(request, copy));
-          return response;
-        })
+        .then((response) => putInRuntimeCache(request, response))
         .catch(async () => {
-          const cache = await caches.open(FALLBACK_CACHE);
-          const cachedPage = await cache.match(request);
-          if (cachedPage) return cachedPage;
-          return caches.match("/");
+          const cached = await caches.match(request);
+          return cached || Response.error();
         })
     );
     return;
   }
 
-  if (isStaticRequest(request)) {
+  if (isStaticAsset(request)) {
     event.respondWith(
       caches.match(request).then((cached) => {
-        if (cached) return cached;
-        return fetch(request).then((response) => {
-          const copy = response.clone();
-          caches.open(STATIC_CACHE).then((cache) => cache.put(request, copy));
-          return response;
-        });
+        const networkFetch = fetch(request)
+          .then((response) => putInRuntimeCache(request, response))
+          .catch(() => null);
+
+        if (cached) {
+          event.waitUntil(networkFetch);
+          return cached;
+        }
+
+        return networkFetch.then((response) => response || Response.error());
       })
     );
   }
